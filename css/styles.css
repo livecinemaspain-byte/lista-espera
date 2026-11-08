@@ -451,3 +451,6 @@ body:has(.cookie:not([hidden])) .pie-kv{padding-bottom:calc(var(--cookie-h,72px)
 /* Enlaces a la venta (/comprar/…): ocultos hasta que la venta esté en producción. Se muestran quitando « data-solo-venta hidden» (COMANDOS_LUNES_9, paso 5) */
 [data-solo-venta][hidden]{display:none!important}
 }
+
+/* Aviso del panel (franja arriba, solo cuando se pone desde el panel de la venta) */
+.aviso-web{position:relative;z-index:60;margin:0;background:#f4f4f1;color:#0a0a0a;padding:10px 16px;font-size:15px;font-weight:600;line-height:1.45;text-align:center}
