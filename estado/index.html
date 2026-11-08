@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Estado de la venta · Interstellar Live Madrid</title>
+<style>
+  :root{color-scheme:dark}
+  body{margin:0;min-height:100vh;background:#050505;color:#f4f4f1;font:400 17px/1.6 -apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;display:flex;align-items:center;justify-content:center}
+  main{max-width:560px;padding:32px 20px}
+  .marca{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#86857f;margin:0 0 28px}
+  .punto{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:10px;vertical-align:1px;background:#3ecf6e}
+  [data-estado="demanda"] .punto{background:#f2b33d}
+  [data-estado="problema"] .punto{background:#e5484d}
+  h1{font-size:30px;line-height:1.2;margin:0 0 14px;font-weight:700;letter-spacing:-.5px}
+  p{margin:0 0 14px;color:#d6d5d0}
+  a{color:#f4f4f1}
+  .botones{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
+  .btn{display:inline-block;padding:13px 18px;background:#f4f4f1;color:#0a0a0a;font-weight:700;text-decoration:none}
+  .btn-linea{background:none;color:#f4f4f1;border:1px solid #f4f4f1}
+  .hora{font-size:13px;color:#86857f;margin-top:28px}
+</style>
+</head>
+<body data-estado="ok">
+<main>
+  <p class="marca">Interstellar Live · Madrid</p>
+  <h1><span class="punto" aria-hidden="true"></span><span id="titulo">Todo funciona</span></h1>
+  <p id="texto">La venta funciona con normalidad.</p>
+  <div class="botones">
+    <a class="btn" href="https://livecinemaes.com/comprar">Comprar entradas</a>
+    <a class="btn btn-linea" href="https://www.ticketmaster.es/">Ticketmaster</a>
+  </div>
+  <p class="hora" id="hora"></p>
+</main>
+<script>
+  // Página de estado fuera de Cloudflare (GitHub Pages): se cambia editando estado.json. Se vuelve a mirar cada minuto.
+  const TEXTOS = {
+    ok: ['Todo funciona', 'La venta funciona con normalidad.'],
+    demanda: ['Mucha demanda', 'Hay muchísima gente comprando a la vez. No cierres la página: la cola avanza y no pierdes tu sitio.'],
+    problema: ['Problema técnico', 'Estamos resolviendo un problema técnico. Ampliamos la preventa{hasta}. Tus compras ya hechas siguen siendo válidas.'],
+  };
+  async function mirar() {
+    try {
+      const e = await fetch('estado.json?t=' + Date.now(), { cache: 'no-store' }).then((r) => r.json());
+      const [titulo, texto] = TEXTOS[e.estado] || TEXTOS.ok;
+      document.body.dataset.estado = TEXTOS[e.estado] ? e.estado : 'ok';
+      document.getElementById('titulo').textContent = titulo;
+      document.getElementById('texto').textContent = (e.texto || texto).replace('{hasta}', e.hasta ? ` hasta las ${e.hasta}` : '');
+      document.getElementById('hora').textContent = 'Comprobado a las ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' }) + ' (hora de Madrid).';
+    } catch { /* se queda lo último */ }
+  }
+  mirar(); setInterval(mirar, 60000);
+</script>
+</body>
+</html>

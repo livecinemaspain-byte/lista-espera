@@ -1,0 +1,6 @@
+{
+  "_como": "Cambia solo «estado» (ok, demanda o problema) y, con «problema», «hasta» (la hora nueva, p. ej. «14:00 del jueves 12»). «texto» sustituye al mensaje preparado si no está vacío. Commit y en un minuto se ve.",
+  "estado": "ok",
+  "hasta": "",
+  "texto": ""
+}
